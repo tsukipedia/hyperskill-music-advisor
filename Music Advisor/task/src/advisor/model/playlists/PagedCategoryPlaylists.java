@@ -4,8 +4,9 @@ import advisor.controller.API;
 import advisor.model.PaginatedContent;
 
 import java.io.IOException;
+import java.util.List;
 
-public class PagedCategoryPlaylists implements PaginatedContent {
+public class PagedCategoryPlaylists extends PaginatedContent {
     private final String categoryName;
 
     public PagedCategoryPlaylists(String categoryName) {
@@ -13,7 +14,7 @@ public class PagedCategoryPlaylists implements PaginatedContent {
     }
 
     @Override
-    public void fetchPage(String accessToken, Integer currentPageFirstIndex) throws IOException, InterruptedException {
-        API.getPlaylistsByCategory(accessToken, this.categoryName, currentPageFirstIndex);
+    public List<Playlist> fetchPage(String accessToken) throws IOException, InterruptedException {
+        return API.getPlaylistsByCategory(accessToken, this.categoryName, super.getCurrentPageFirstIndex());
     }
 }

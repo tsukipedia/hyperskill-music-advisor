@@ -7,23 +7,25 @@ import advisor.model.PaginatedContent;
 import advisor.model.User;
 import advisor.model.PagedCategories;
 import advisor.model.playlists.PagedCategoryPlaylists;
+import advisor.view.AlbumPrinter;
+import advisor.view.CategoriesPrinter;
+import advisor.view.PlaylistPrinter;
 import advisor.view.Printer;
 
 import java.io.IOException;
+import java.util.List;
 
 public class InputReader {
     private static User user = new User();
     private static String accessToken = "";
-    private static PaginatedContent currentContent;
-    private static Integer currentPageFirstIndex = 0;
+    private static PaginatedContent apiCaller;
+    private static Printer printer;
 
     public static void evaluateUserInput(String input) throws IOException, InterruptedException {
 
-        if (!input.equals("auth") && !user.isAuthenticated()) {
-            Printer.printAuthError();
-            return;
-        }
+        if (!input.equals("auth") && !user.isAuthenticated()) throw new RuntimeException("Please, provide access for application.");
 
+        List content;
         switch (input) {
             case "auth" -> {
                 Authentication auth = new Authentication();
@@ -34,51 +36,44 @@ public class InputReader {
                 System.out.println("---SUCCESS---");
             }
             case "featured" -> {
-                currentContent = new PagedFeaturedPlaylists();
-                currentPageFirstIndex = 0;
-                currentContent.fetchPage(accessToken, currentPageFirstIndex);
+                apiCaller = new PagedFeaturedPlaylists();
+                printer = new PlaylistPrinter();
+                content = apiCaller.fetchPage(accessToken);
+                printer.printContent(content);
             }
             case "new" -> {
-                currentContent = new PagedReleases();
-                currentPageFirstIndex = 0;
-                currentContent.fetchPage(accessToken, currentPageFirstIndex);
+                apiCaller = new PagedReleases();
+                printer = new AlbumPrinter();
+                content = apiCaller.fetchPage(accessToken);
+                printer.printContent(content);
             }
             case "categories" -> {
-                currentContent = new PagedCategories();
-                currentPageFirstIndex = 0;
-                currentContent.fetchPage(accessToken, currentPageFirstIndex);
+                apiCaller = new PagedCategories();
+                printer = new CategoriesPrinter();
+                content = apiCaller.fetchPage(accessToken);
+                printer.printContent(content);
             }
             case "prev" -> {
-                currentPageFirstIndex -= API.getPageSize();
-                if (currentPageFirstIndex < 0) {
-                    currentPageFirstIndex = 0;
-                    System.out.println("No more pages.");
-                } else {
-                    currentContent.fetchPage(accessToken, currentPageFirstIndex);
-                }
+                apiCaller.changePage("prev");
+                content = apiCaller.fetchPage(accessToken);
+                printer.printContent(content);
             }
             case "next" -> {
-                if (API.getCurrentPage(currentPageFirstIndex + API.getPageSize()) > API.getTotalPages()) {
-                    System.out.println("No more pages.");
-                } else {
-                    currentPageFirstIndex += API.getPageSize();
-                    currentContent.fetchPage(accessToken, currentPageFirstIndex);
-                }
+                apiCaller.changePage("next");
+                content = apiCaller.fetchPage(accessToken);
+                printer.printContent(content);
             }
             default -> {
                 if (input.contains("playlists")) {
                     String categoryName = input.replace("playlists ", "");
-                    currentContent = new PagedCategoryPlaylists(categoryName);
-                    currentPageFirstIndex = 0;
-                    currentContent.fetchPage(accessToken, currentPageFirstIndex);
+                    apiCaller = new PagedCategoryPlaylists(categoryName);
+                    printer = new PlaylistPrinter();
+                    content = apiCaller.fetchPage(accessToken);
+                    printer.printContent(content);
                 } else {
                     System.out.println("Error: Invalid command.");
                 }
             }
         }
-    }
-
-    public static void setCurrentPageFirstIndex(Integer currentPageFirstIndex) {
-        InputReader.currentPageFirstIndex = currentPageFirstIndex;
     }
 }

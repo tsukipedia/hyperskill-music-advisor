@@ -27,7 +27,10 @@ public class Authentication {
     private static final String clientSecret = "a3d6e766165b4e9bb3f0ad88c27742ed";
 
     public String getAccess(User user) throws IOException, InterruptedException {
-        Printer.printAuth(baseUrl);
+        System.out.println(Authentication.getBaseUrl()
+                + "/authorize?client_id="
+                + Authentication.getClientId()
+                + "&redirect_uri=http://localhost:8080&response_type=code");
         CountDownLatch actionManager = new CountDownLatch(1);
         HttpServer server = HttpServer.create();
         server.bind(new InetSocketAddress(8080), 0);
@@ -91,6 +94,14 @@ public class Authentication {
 
     public static void setBaseUrl(String url) {
         baseUrl = url;
+    }
+
+    public static String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public static String getClientId() {
+        return clientId;
     }
 
 }

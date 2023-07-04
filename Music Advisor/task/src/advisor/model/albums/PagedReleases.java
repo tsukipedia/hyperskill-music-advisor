@@ -4,11 +4,12 @@ import advisor.controller.API;
 import advisor.model.PaginatedContent;
 
 import java.io.IOException;
+import java.util.List;
 
-public class PagedReleases implements PaginatedContent {
+public class PagedReleases extends PaginatedContent {
     @Override
-    public void fetchPage(String accessToken, Integer currentPageFirstIndex) throws IOException, InterruptedException {
-        API.getNewReleases(accessToken, currentPageFirstIndex);
+    public List<Album> fetchPage(String accessToken) throws IOException, InterruptedException {
+        return API.getNewReleases(accessToken, super.getCurrentPageFirstIndex());
     }
 
 }

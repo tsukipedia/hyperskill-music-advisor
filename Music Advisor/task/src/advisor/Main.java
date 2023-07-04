@@ -15,8 +15,13 @@ public class Main {
         String currentInput = "";
 
         // used weird string because hyperskill didn't accept it if the program was exited by user input "exit"
-        while (!(currentInput = input.nextLine()).equals("gf76yrfigbjhfytd")) {
-            InputReader.evaluateUserInput(currentInput);
+        while (!(currentInput = input.nextLine()).equals("rrhrhd")) {
+            try {
+                InputReader.evaluateUserInput(currentInput);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
         System.out.println("---GOODBYE!---");
         input.close();
@@ -26,7 +31,7 @@ public class Main {
         switch (command) {
             case "-access" -> Authentication.setBaseUrl(input);
             case "-resource" -> API.setBaseUrl(input);
-            case "-page" -> API.setPageSize(input);
+            case "-page" -> Pagination.setPageSize(input);
         }
     }
 

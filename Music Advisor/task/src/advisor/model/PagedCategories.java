@@ -3,11 +3,13 @@ package advisor.model;
 import advisor.controller.API;
 
 import java.io.IOException;
+import java.util.List;
 
-public class PagedCategories implements PaginatedContent {
+public class PagedCategories extends PaginatedContent {
 
     @Override
-    public void fetchPage(String accessToken, Integer currentPageFirstIndex) throws IOException, InterruptedException {
-        API.getCategories(accessToken, currentPageFirstIndex);
+    public List<String> fetchPage(String accessToken) throws IOException, InterruptedException {
+        return API.getCategories(accessToken, super.getCurrentPageFirstIndex());
     }
+
 }

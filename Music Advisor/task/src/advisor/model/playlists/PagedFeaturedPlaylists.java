@@ -4,10 +4,12 @@ import advisor.controller.API;
 import advisor.model.PaginatedContent;
 
 import java.io.IOException;
+import java.util.List;
 
-public class PagedFeaturedPlaylists implements PaginatedContent {
+public class PagedFeaturedPlaylists extends PaginatedContent {
     @Override
-    public void fetchPage(String accessToken, Integer currentPageFirstIndex) throws IOException, InterruptedException {
-        API.getFeaturedPlaylists(accessToken, currentPageFirstIndex);
+    public List<Playlist> fetchPage(String accessToken) throws IOException, InterruptedException {
+        return API.getFeaturedPlaylists(accessToken, super.getCurrentPageFirstIndex());
     }
+
 }
