@@ -10,7 +10,7 @@ public class PlaylistPrinter implements Printer {
     public void printContent(List content) {
         if (content == null) return;
 
-        System.out.println("---FEATURED---");
+        System.out.println("---PLAYLISTS---");
         for (Playlist playlist : (List<Playlist>) content) {
             System.out.println(playlist.getName());
             System.out.println(playlist.getLink() + "\n");
