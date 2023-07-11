@@ -22,9 +22,9 @@ public class Authentication {
 
     private static String baseUrl = "https://accounts.spotify.com";
 
-    private static final String clientId = "6623a7ef869f41fc9bbd028c510bfe14";
+    private static final String clientId = "";
 
-    private static final String clientSecret = "a3d6e766165b4e9bb3f0ad88c27742ed";
+    private static final String clientSecret = "";
 
     public String getAccess(User user) throws IOException, InterruptedException {
         System.out.println(Authentication.getBaseUrl()
